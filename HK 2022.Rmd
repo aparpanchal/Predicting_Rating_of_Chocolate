@@ -1,0 +1,338 @@
+```{r}
+setwd("C:\\Users\\panch\\Documents\\Coursework\\Hackathon 2022")
+```
+
+#Loading Data
+```{r}
+data = read.csv("C:\\Users\\panch\\Documents\\Coursework\\Hackathon 2022\\data.csv")
+scoringdata = read.csv("C:\\Users\\panch\\Documents\\Coursework\\Hackathon 2022\\scoringData.csv")
+```
+
+
+#Finding na cloumns in data and scoring data
+```{r}
+na = is.na(data)
+sumofna = colSums(is.na(data))
+colsumofna = colSums(is.na(data)) > 0
+namesofcolswithna = colnames(data)[colSums(is.na(data)) > 0]
+namesofcolswithna
+
+na = is.na(scoringdata)
+sumofna = colSums(is.na(scoringdata))
+colsumofna = colSums(is.na(scoringdata)) > 0
+namesofcolswithna = colnames(scoringdata)[colSums(is.na(scoringdata)) > 0]
+namesofcolswithna
+```
+
+#Replacing NA values with mean of the columns in data and scoringdata
+```{r}
+data[is.na(data$number_of_ingredients),]$number_of_ingredients <- mean(data$number_of_ingredients, na.rm = T)
+scoringdata[is.na(scoringdata$number_of_ingredients),]$number_of_ingredients <- mean(scoringdata$number_of_ingredients, na.rm = T)
+```
+
+#Converting categorical variables which are important to factor variables of data and scoringData
+```{r}
+data$company_location = as.factor(data$company_location)
+data$country_of_bean_origin = as.factor(data$country_of_bean_origin)
+
+scoringdata$company_location = as.factor(scoringdata$company_location)
+scoringdata$country_of_bean_origin = as.factor(scoringdata$country_of_bean_origin)
+```
+
+
+#Cleaning company location in data and scoringdata
+```{r}
+library(forcats)
+data$company_location = fct_collapse(data$company_location, Europe = c("Belgium","France","Italy","U.K."),
+                                                            S.America = c("Ecuador"),
+                                                            N.America = c("Canada","U.S.A."))
+scoringdata$company_location = fct_collapse(scoringdata$company_location, Europe = c("Belgium","France","Italy","U.K."),
+                                                            S.America = c("Ecuador"),
+                                                            N.America = c("Canada","U.S.A."))
+
+```
+
+#Forming Binary Variables from Boolean Variable Columns in data and scoringdata
+```{r}
+data$sweet_binary <- ifelse(data$sweet == 'Yes', 1, 0)
+data$nutty_binary <- ifelse(data$nutty == 'Yes', 1, 0)
+data$cocoa_binary <- ifelse(data$cocoa == 'Yes', 1, 0)
+data$roasty_binary <- ifelse(data$roasty == 'Yes', 1, 0)
+data$earthy_binary <- ifelse(data$earthy == 'Yes', 1, 0)
+data$creamy_binary <- ifelse(data$creamy == 'Yes', 1, 0)
+data$sandy_binary <- ifelse(data$sandy == 'Yes', 1, 0)
+data$fatty_binary <- ifelse(data$fatty == 'Yes', 1, 0)
+data$floral_binary <- ifelse(data$floral == 'Yes', 1, 0)
+data$intense_binary <- ifelse(data$intense == 'Yes', 1, 0)
+data$sour_binary <- ifelse(data$sour == 'Yes', 1, 0)
+data$vanilla_binary <- ifelse(data$vanilla == 'Yes', 1, 0)
+data$fruit_binary <- ifelse(data$fruit == 'Yes', 1, 0)
+data$molasses_binary <- ifelse(data$molasses == 'Yes', 1, 0)
+data$woody_binary <- ifelse(data$woody == 'Yes', 1, 0)
+data$sticky_binary <- ifelse(data$sticky == 'Yes', 1, 0)
+data$coffee_binary <- ifelse(data$coffee == 'Yes', 1, 0)
+data$rich_binary <- ifelse(data$rich == 'Yes', 1, 0)
+data$dried.fruit_binary <- ifelse(data$dried.fruit == 'Yes', 1, 0)
+data$ingredient_Beans_binary <- ifelse(data$ingredient_Beans == 'Yes', 1, 0)
+data$ingredient_Sugar_binary <- ifelse(data$ingredient_Sugar == 'Yes', 1, 0)
+data$ingredient_Sweetener_binary <- ifelse(data$ingredient_Sweetener == 'Yes', 1, 0)
+data$ingredient_Cocoa_Butter_binary <- ifelse(data$ingredient_Cocoa_Butter == 'Yes', 1, 0)
+data$ingredient_vanilla_binary <- ifelse(data$ingredient_vanilla == 'Yes', 1, 0)
+data$ingredient_lecithin_binary <- ifelse(data$ingredient_lecithin == 'Yes', 1, 0)
+data$ingredient_salt <- ifelse(data$ingredient_salt == 'Yes', 1, 0)
+
+
+scoringdata$sweet_binary <- ifelse(scoringdata$sweet == 'Yes', 1, 0)
+scoringdata$nutty_binary <- ifelse(scoringdata$nutty == 'Yes', 1, 0)
+scoringdata$cocoa_binary <- ifelse(scoringdata$cocoa == 'Yes', 1, 0)
+scoringdata$roasty_binary <- ifelse(scoringdata$roasty == 'Yes', 1, 0)
+scoringdata$earthy_binary <- ifelse(scoringdata$earthy == 'Yes', 1, 0)
+scoringdata$creamy_binary <- ifelse(scoringdata$creamy == 'Yes', 1, 0)
+scoringdata$sandy_binary <- ifelse(scoringdata$sandy == 'Yes', 1, 0)
+scoringdata$fatty_binary <- ifelse(scoringdata$fatty == 'Yes', 1, 0)
+scoringdata$floral_binary <- ifelse(scoringdata$floral == 'Yes', 1, 0)
+scoringdata$intense_binary <- ifelse(scoringdata$intense == 'Yes', 1, 0)
+scoringdata$sour_binary <- ifelse(scoringdata$sour == 'Yes', 1, 0)
+scoringdata$vanilla_binary <- ifelse(scoringdata$vanilla == 'Yes', 1, 0)
+scoringdata$fruit_binary <- ifelse(scoringdata$fruit == 'Yes', 1, 0)
+scoringdata$molasses_binary <- ifelse(scoringdata$molasses == 'Yes', 1, 0)
+scoringdata$woody_binary <- ifelse(scoringdata$woody == 'Yes', 1, 0)
+scoringdata$sticky_binary <- ifelse(scoringdata$sticky == 'Yes', 1, 0)
+scoringdata$coffee_binary <- ifelse(scoringdata$coffee == 'Yes', 1, 0)
+scoringdata$rich_binary <- ifelse(scoringdata$rich == 'Yes', 1, 0)
+scoringdata$dried.fruit_binary <- ifelse(scoringdata$dried.fruit == 'Yes', 1, 0)
+scoringdata$ingredient_Beans_binary <- ifelse(scoringdata$ingredient_Beans == 'Yes', 1, 0)
+scoringdata$ingredient_Sugar_binary <- ifelse(scoringdata$ingredient_Sugar == 'Yes', 1, 0)
+scoringdata$ingredient_Sweetener_binary <- ifelse(scoringdata$ingredient_Sweetener == 'Yes', 1, 0)
+scoringdata$ingredient_Cocoa_Butter_binary <- ifelse(scoringdata$ingredient_Cocoa_Butter == 'Yes', 1, 0)
+scoringdata$ingredient_vanilla_binary <- ifelse(scoringdata$ingredient_vanilla == 'Yes', 1, 0)
+scoringdata$ingredient_lecithin_binary <- ifelse(scoringdata$ingredient_lecithin == 'Yes', 1, 0)
+scoringdata$ingredient_salt <- ifelse(scoringdata$ingredient_salt == 'Yes', 1, 0)
+
+
+
+```
+
+#Finding correlation of all numeric variables with price
+```{r}
+numericVars <- which(sapply(data, is.numeric))
+data_numVar <- data[,numericVars]
+cor_numVar <- cor(data_numVar)
+cor_sorted <- as.matrix(sort(cor_numVar[,'rating'], decreasing = TRUE))
+
+(cor_sorted)
+```
+
+#Exporting correalation matrix image for presentation 
+```{r}
+#png(filename = "mycorrplot.png", width = 1200, height = 800)
+#corrplot(cor_numVar, type = "lower",)
+
+```
+
+
+#Stating the column types in the data
+```{r}
+NumericVars <- which(sapply(data, is.numeric)) #index vector numeric variables
+FactorVars <- which(sapply(data, is.factor)) #index vector factor variables
+CharacterVars <- which(sapply(data, is.character)) #index vector character variables
+
+cat('There are', length(NumericVars), 'numeric variables, and', length(FactorVars), 'factor variables, and',length(CharacterVars),'character variables')
+```
+#Subsetting data and scoring data to make models
+```{r}
+DATA = subset(data ,select = c(rating,cocoa_binary,creamy_binary,ingredient_Beans_binary,rich_binary,fruit_binary,earthy_binary,number_of_ingredients,sweet_binary,sour_binary,cocoa_percent,ingredient_vanilla_binary,vanilla_binary,company_location,dried.fruit_binary,nutty_binary,fatty_binary,molasses_binary))
+              
+SCORINGDATA = subset(scoringdata,select = c(cocoa_binary,creamy_binary,ingredient_Beans_binary,rich_binary,fruit_binary,earthy_binary,number_of_ingredients,sweet_binary,sour_binary,cocoa_percent,ingredient_vanilla_binary,vanilla_binary,company_location,dried.fruit_binary,nutty_binary,fatty_binary,molasses_binary))
+
+SCORINGDATA$rating = NA
+```
+
+#Splitting the data into test and train
+```{r}
+library(caret)
+set.seed(617)
+split<-createDataPartition(DATA$rating,p = 0.75 ,list=FALSE,groups = 100)
+train<-DATA[split,]
+test<-DATA[-split,]
+
+```
+
+#Best linear regression
+```{r}
+model_lm = lm(rating ~ . , train)
+
+pred_lm_train = predict(model_lm)
+rmse_lm_train = sqrt(mean((pred_lm_train - train$rating)^2))
+
+pred_lm = predict(model_lm , newdata = test)
+rmse_lm_test = sqrt(mean((pred_lm - test$rating)^2))
+
+ 
+
+rmse_lm_train ; rmse_lm_test
+```
+
+#Best logistic regression
+```{r}
+
+model_glm = glm(rating ~ ., train , family = 'inverse.gaussian')
+
+pred_glm_train = predict(model_glm, type='response')
+rmse_glm_train = sqrt(mean((pred_glm_train - train$rating)^2)) #70.82915
+
+pred_glm_test = predict(model_glm , newdata = test , type = 'response')
+rmse_glm_test = sqrt(mean((pred_glm_test - test$rating)^2)) #71.19982
+
+#pred_glm_SCORING = predict(model_lm , newdata = SCORINGDATA , type = 'response')
+
+rmse_glm_train ; rmse_glm_test
+
+#(test rmse : 70.13889 , rmse after uploading : 69.96191)
+```
+
+#Best decision tree selection
+```{r}
+
+library(rpart)
+
+model_tree = rpart(rating ~ . , train , method ='anova', control = rpart.control(cp = 4e-04))
+
+pred_tree_train = predict(model_tree)
+rmse_tree_train = sqrt(mean((pred_tree_train - train$rating)^2)) #65.26914
+
+pred_tree_test = predict(model_tree , newdata = test)
+rmse_tree_test = sqrt(mean((pred_tree_test - test$rating)^2)) #68.48148
+
+#pred_tree_SCORING = predict(model_tree , newdata = SCORINGDATA)
+
+rmse_tree_train ; rmse_tree_test
+```
+
+#Best Ranger model
+```{r}
+library(ranger)
+set.seed(617)
+ranger = ranger(rating~.,
+                       data = train, 
+                       num.trees = 3000)
+
+pred_ranger_train = predict(ranger, data = train, num.trees = 3000)
+rmse_ranger_train = sqrt(mean((pred_ranger_train$predictions - train$rating)^2))
+
+
+pred_ranger_test = predict(ranger , test , num.trees = 3000)
+rmse_ranger_test = sqrt(mean((pred_ranger_test$predictions - test$rating)^2))
+
+
+rmse_ranger_train ; rmse_ranger_test
+```
+
+#Preparing data in a matrix format to feed in the XGboost model
+```{r}
+library(vtreat)
+trt = designTreatmentsZ(dframe = train,
+                        varlist = names(train)[2:18])
+
+newvars = trt$scoreFrame[trt$scoreFrame$code%in% c('clean','lev'),'varName']
+
+train_input = prepare(treatmentplan = trt, 
+                      dframe = train,
+                      varRestriction = newvars)
+
+test_input = prepare(treatmentplan = trt, 
+                     dframe = test,
+                     varRestriction = newvars)
+
+SCORING_input = prepare(treatmentplan = trt, 
+                     dframe = SCORINGDATA,
+                     varRestriction = newvars)
+```
+
+#Best XGboost model
+```{r}
+library(xgboost)
+set.seed(617)
+xgboost12 <- xgboost(data = as.matrix(train_input), 
+               label = train$rating, 
+               eta = 0.001,gamma=0,
+               max_depth = 3,
+               nround=6000, 
+               objective="reg:squarederror",
+               early_stopping_rounds=50,
+               print_every_n=1000,
+               subsample = 0.5,
+               )
+
+
+pred_xgb12_train = predict(xgboost12 , newdata = as.matrix(train_input))
+rmse_xgb12_train = sqrt(mean((pred_xgb12_train - train$rating)^2))
+
+pred_xgb12_test = predict(xgboost12 , newdata = as.matrix(test_input))
+rmse_xgb12_test = sqrt(mean((pred_xgb12_test - test$rating)^2))
+
+rmse_xgb12_train ; rmse_xgb12_test
+```
+
+Best Gradient Boosting Model
+```{r}
+library(gbm)
+set.seed(617)
+boost = gbm(rating~.,
+            data=train,
+            distribution="gaussian",
+            n.trees = 3000,
+            interaction.depth = 2,
+            shrinkage = 0.01)
+
+
+pred_gbm_train = predict(boost , train )
+rmse_gbm_train = sqrt(mean((pred_gbm_train - train$rating)^2))
+
+pred_gbm_test = predict(boost , newdata = test )
+rmse_gbm_test = sqrt(mean((pred_gbm_test - test$rating)^2))
+
+
+pred_gbm_SCORING = predict(boost , newdata = SCORINGDATA)
+
+rmse_gbm_train ; rmse_gbm_test
+```
+#Displaying the results of the Gradient Boosting Model
+```{r}
+par(mar = c(7, 11, 1, 1))
+summary(
+  boost, 
+  cBars = 15,
+  method = relative.influence, # also can use permutation.test.gbm
+  las = 2
+  )
+```
+#Finding the relationship of cocoa percent and rating of chocolate
+```{r}
+model = lm(rating ~ cocoa_percent,data)
+summary(model)
+```
+
+#Finding the relationship of company location and rating of chocolate
+```{r}
+model = lm(rating ~ relevel(company_location,ref='Other'),data)
+summary(model)
+```
+
+#Finding the relationship of number_of_ingredients and rating of chocolate
+```{r}
+model = lm(rating ~ number_of_ingredients,data)
+summary(model)
+```
+
+#Making predictions and forming the submission file
+```{r}
+pred_gbm_SCORING = predict(boost , newdata = SCORINGDATA)
+
+id = scoringdata$id
+predicted_rating = pred_gbm_SCORING
+file = data.frame(id , predicted_rating)      
+
+sub1 = write.csv(x = file , file = 'TeamADA.csv' , row.names = F)
+```
+
